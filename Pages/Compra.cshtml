@@ -1,0 +1,52 @@
+﻿@page
+@model Compras.Pages.CompraModel
+@using Compras.HttpCLiente
+@using Microsoft.AspNetCore.Mvc.RazorPages
+@inject IPokeApiService PokeApiService
+
+<h1>Pokémon List</h1>
+<div style="display: flex;">
+    <div style="width: 70%;">
+        @if (Model.Pokemons != null)
+        {
+            foreach (var pokemon in Model.Pokemons)
+            {
+                <div>
+                    <h3>@pokemon.Name</h3>
+                    <img src="@pokemon.Sprites.Front_default"/>
+                    <form method="post" asp-page-handler="Comprar" asp-route-pokemonId="@pokemon.Id" asp-route-pokemonName="@pokemon.Name">
+                        <button type="submit">Agregar al carrito</button>
+                    </form>
+                </div>
+            }
+        }
+        else
+        {
+            <p>Loading...</p>
+        }
+    </div>
+
+    <div style="width: 30%; border: 1px solid #ccc; padding: 10px; margin-left: 20px;">
+        <h2>Lista de Compras</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var pokemon in Model.Compras)
+                {
+                    <tr>
+                        <td>@pokemon.Id</td>
+                        <td>@pokemon.Name</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <form method="post" asp-page-handler="ExportarCSV">
+            <button type="submit">Comprar</button>
+        </form>
+    </div>
+</div>
